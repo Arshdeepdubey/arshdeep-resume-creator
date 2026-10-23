@@ -1,0 +1,206 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[margin=0.3in]{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{xcolor}
+
+
+% Color definition
+\definecolor{primary}{RGB}{44, 62, 80}
+
+% Configuration
+\urlstyle{same}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primary,
+    urlcolor=primary
+}
+
+
+% Section formatting
+\titleformat{\section}{\large\bfseries\color{primary}}{}{0em}{}[\titlerule]
+
+\titlespacing*{\section}{0pt}{3pt}{2pt}
+
+
+% List configuration
+\setlist[itemize]{leftmargin=1.1em, topsep=1pt, itemsep=1.2pt, parsep=0pt, partopsep=0pt}
+
+
+\begin{document}
+\pagestyle{empty}
+
+% Header
+\begin{center}
+    {\LARGE \bfseries \color{primary} ARSHDEEP DUBEY} \\[4pt]
+    \small
+    +91 7635055774 $\cdot$ Jamshedpur, Jharkhand, India \\[3pt]
+    \href{mailto:arshdeepdubey.ad@gmail.com}{arshdeepdubey.ad@gmail.com} $\cdot$ \href{https://github.com/Arshdeepdubey}{GitHub} $\cdot$ 
+    \href{https://www.linkedin.com/in/dubey-arshdeep}{LinkedIn} $\cdot$ \href{https://leetcode.com/u/zorojuro_conqueror/}{LeetCode} $\cdot$ \href{https://arshdeepdubey.github.io/Portfolio/}{Portfolio}
+\end{center}
+
+\vspace{-4pt}
+
+% Technical Skills
+
+\section*{SKILLS}
+
+\small
+
+\begin{itemize}
+
+    \item \textbf{Programming \& Scripting:} Python, Java, Bash/Shell, SQL (Oracle), HTML/CSS, JavaScript (Node.js)
+
+    \item \textbf{Cloud Infrastructure \& DevOps:} AWS (S3, IAM, EC2, EKS, Secrets Manager), Terraform (IaC), Docker, Kubernetes, Helm, ArgoCD, Harbor, Jenkins, GitOps
+
+    \item \textbf{Frameworks, Integration \& Developer Tools:} SnapLogic, REST APIs, ELK Stack (Kibana), MongoDB, Maven, Spring Boot, Git
+
+    \item \textbf{IT Operations \& Support:} Incident Management, Root Cause Analysis (RCA), Tier-1/Tier-2 Support, SLA Adherence
+
+\end{itemize}
+
+
+% Experience
+
+\section*{WORK EXPERIENCE}
+
+\noindent \textbf{Fidelity International} \hfill \textbf{Gurugram, India} \\
+\textit{Software Engineer II} \hfill \textit{October 2025 -- July 2026}
+
+\begin{itemize}
+
+    \item \textbf{Owned} the cross-cutting ELK Observability Epic across \textbf{14 cloud microservices}; standardized custom JSON logging schemas and Kibana dashboards, boosting log traceability by \textbf{30\%} and reducing production incident MTTR by \textbf{40\%}.
+
+    \item \textbf{Engineered} an automated secret creation pipeline in Terraform, AWS Secrets Manager, and Jenkins while establishing GitOps workflows with Helm, ArgoCD, and Docker to decouple code/config, cutting deployment overhead by \textbf{30\%}.
+
+    \item \textbf{Architected} enterprise ODS Data Lifecycle Pipelines using Java, SnapLogic, and Terraform to automate data archival and retrieval across AWS RDS, S3, and Glacier, optimizing cloud storage costs while enforcing strict compliance SLAs.
+
+\end{itemize}
+
+\vspace{1pt}
+
+\noindent \textit{Software Engineer} \hfill \textit{August 2024 -- October 2025}
+
+\begin{itemize}
+
+    \item \textbf{Solely engineered} and deployed \textbf{20+ production ETL pipelines} in SnapLogic for cloud migration, authoring \textbf{10+ reusable templates} adopted portfolio-wide that enhanced engineering team productivity by \textbf{75\%}.
+
+    \item \textbf{Developed} high-throughput Java/Spring Boot data connectors (REST-to-S3, DB-to-S3) processing over \textbf{10,000 million records daily}, while managing production deployments and on-call rotations to consistently maintain strict SLA targets.
+
+    \item \textbf{Implemented} Zero-Trust cloud security modules in Terraform, automating secret lifecycle management in AWS Secrets Manager, CyberArk certificate renewals, and cross-account IRSA roles for EKS workloads.
+
+\end{itemize}
+
+\vspace{1pt}
+
+\noindent \textit{Associate Software Engineer} \hfill \textit{August 2023 -- August 2024}
+
+\begin{itemize}
+
+    \item \textbf{Developed} a full-stack travel booking platform from scratch using Spring Boot, Maven, Thymeleaf, and MongoDB, and contributed to a Node.js NFT minting bot for automated, decentralized voucher distribution.
+
+    \item \textbf{Integrated} Microsoft Graph API with OAuth 2.0 and SMTP authentication to engineer an automated organizational messaging engine, eliminating \textbf{2--3 days} of auth integration boilerplate and maintaining high platform uptime.
+
+\end{itemize}
+
+\vspace{2pt}
+
+\noindent \textbf{Samsung R\&D Institute India -- Bangalore} \hfill \textbf{Bangalore, India} \\
+\textit{Computer Vision Research Intern} \hfill \textit{June 2021 -- January 2022}
+
+\begin{itemize}
+
+    \item \textbf{Developed} real-time noise reduction pipelines for live image and video streams using Python and OpenCV, applying spatial filtering techniques to enhance frame clarity for low-latency automated detection systems.
+
+\end{itemize}
+
+% Education
+
+\section*{EDUCATION}
+
+\noindent \textbf{Siksha 'O' Anusandhan University (ITER)} \hfill \textbf{Bhubaneswar, India} \\
+\textit{B. Tech in Computer Science \& Engineering} \hfill \textit{August 2019 -- August 2023}
+
+\vspace{1pt}
+
+\noindent \textbf{IIT Ropar} \hfill \textbf{Rupnagar, Punjab, India} \\
+\textit{Credential: Major in Artificial Intelligence} \hfill \textit{September 2024 -- February 2026}
+
+
+% Projects
+
+\section*{PROJECT WORK}
+
+
+\noindent \textbf{its-your-own-finance-buddy-chandler} \ $|$ \ \textit{Java, Spring Boot, Microservices, REST APIs} \hfill \href{https://github.com/Arshdeepdubey/its-your-own-finance-buddy-chandler}{\underline{GitHub Link}}
+
+\begin{itemize}
+
+    \item \textbf{Designed} a modular microservices platform implementing global error handling, dynamic environment configurations, and API fault-tolerance mechanisms. \textbf{Streamlined} inter-service communication workflows to ensure reliable payload delivery across distributed endpoints.
+
+\end{itemize}
+
+\vspace{2pt}
+
+\noindent \textbf{config-of-our-finance-buddy-chandler} \ $|$ \ \textit{GitOps, YAML, Microservices, CI/CD} \hfill \href{https://github.com/Arshdeepdubey/config-of-our-finance-buddy-chandler}{\underline{GitHub Link}}
+
+\begin{itemize}
+
+    \item \textbf{Implemented} a GitOps-driven configuration repository that decouples application source code from environment configurations. \textbf{Enabled} independent CI/CD release cycles and precise, version-controlled change tracking, significantly reducing deployment overhead and risk.
+
+\end{itemize}
+
+\vspace{2pt}
+
+\noindent \textbf{MoodMatch} \ $|$ \ \textit{Python, Docker, FAISS Semantic Search, LLM} \hfill \href{https://github.com/Arshdeepdubey/MoodMatch}{\underline{GitHub Link}}
+
+\begin{itemize}
+
+    \item \textbf{MoodMatch} is a \textbf{production}-ready, AI-powered anime recommendation engine combining facial emotion detection, 3-model ensemble intelligence, multi-turn conversational AI, and context-aware ranking—serving 1,000+ concurrent users with <250ms response time across Docker, local, and cloud deployments.
+
+\end{itemize}
+
+\vspace{2pt}
+
+\noindent \textbf{active-vulnerability-plugin} \ $|$ \ \textit{GitHub Copilot CLI, Node.js, GitHub Actions, MCP} \hfill \href{https://github.com/Arshdeepdubey/active-vulnerability-plugin}{\underline{GitHub Link}}
+
+\begin{itemize}
+
+    \item \textbf{Built} Active Vulnerability Hunter — a real-time GitHub Copilot CLI security plugin that fetches critical vulnerabilities from GitHub's database — and established \textbf{production} infrastructure with automated testing, linting, and CI/CD pipelines for secure, efficient vulnerability tracking.
+
+\end{itemize}
+
+\vspace{2pt}
+
+\noindent \textbf{microsoft-graph-sendMail} \ $|$ \ \textit{Microsoft Graph API, JavaScript, OAuth2, CI/CD} \hfill \href{https://github.com/Arshdeepdubey/microsoft-graph-sendMail}{\underline{GitHub Link}}
+
+\begin{itemize}
+
+    \item \textbf{Engineered} a production-ready Node.js email notification service featuring Microsoft Graph API, OAuth 2.0, and automated CI/CD pipelines; created a reusable drop-in template that reduced auth integration boilerplate by 2--3 days.
+
+\end{itemize}
+
+
+% Certifications
+
+\section*{AWARDS \& CERTIFICATIONS}
+
+\begin{itemize}[leftmargin=0pt, label={}, itemsep=2pt, parsep=0pt]
+
+    \item \textbf{On the Spot Award:} Awarded by Cloud Migration Team in February 2025 for outstanding performance and delivering business critical KPI's
+    
+    \item \textbf{Table Tennis Doubles Champion:} Won the doubles tournament out of 50 qualifying teams in August 2026
+
+    \item \textbf{Scripting Badges:} HackerRank Java (Basic) $\cdot$ HackerRank Problem Solving (Basic) $\cdot$ Practical GitHub Actions
+
+    \item \textbf{Cloud \& DevOps:} HashiCorp Certified Terraform Associate $\cdot$ LFS169: Intro to GitOps $\cdot$ KodeKloud Kubernetes (Level 1) $\cdot$ LFS158: Intro to Kubernetes $\cdot$ LFS167: Intro to Jenkins
+
+    \item \textbf{Security \& AI:} Cybersecurity Awareness Terminology $\cdot$ Google AI Professional Certificate
+
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,98 @@
+name: Tailor resume
+
+on:
+  workflow_dispatch:
+    inputs:
+      jd_file:
+        description: "Committed JD file to use when job_description is empty"
+        required: false
+        default: "jobs/sample_jd.txt"
+        type: string
+      job_description:
+        description: "Paste a job description here (overrides jd_file)"
+        required: false
+        type: string
+      job_slug:
+        description: "Short name for the output file, e.g. avoca-software-engineer"
+        required: true
+        default: "tailored"
+        type: string
+      instructions:
+        description: "Extra instructions for this run (optional)"
+        required: false
+        type: string
+      model:
+        description: "GitHub Models model id (free tier)"
+        required: false
+        default: "meta/Llama-3.3-70B-Instruct"
+        type: string
+      output_repo:
+        description: "Optional owner/repo to save the .tex into, e.g. your-user/resume-output. Leave empty to only download the artifact."
+        required: false
+        type: string
+      output_branch:
+        description: "Branch in output_repo"
+        required: false
+        default: "main"
+        type: string
+
+permissions:
+  contents: read
+  models: read   # lets GITHUB_TOKEN call GitHub Models
+
+jobs:
+  tailor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install LaTeX (pdflatex and the template packages)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended
+
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
+
+      - name: Tailor resume
+        env:
+          # Inputs go through env vars (never interpolated into the shell) to avoid injection.
+          JD_TEXT: ${{ inputs.job_description }}
+          JD_FILE: ${{ inputs.jd_file }}
+          EXTRA_INSTRUCTIONS: ${{ inputs.instructions }}
+          JOB_SLUG: ${{ inputs.job_slug }}
+          LLM_MODEL: ${{ inputs.model }}
+          LLM_BASE_URL: https://models.github.ai/inference
+          LLM_API_KEY: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/tailor.py
+
+      - name: Upload resume (.tex) for download
+        uses: actions/upload-artifact@v4
+        with:
+          name: resume-${{ inputs.job_slug }}
+          path: output/*.tex
+          if-no-files-found: error
+
+      - name: Save resume to output repo
+        if: inputs.output_repo != ''
+        env:
+          OUTPUT_REPO: ${{ inputs.output_repo }}
+          OUTPUT_BRANCH: ${{ inputs.output_branch }}
+          OUTPUT_TOKEN: ${{ secrets.OUTPUT_REPO_TOKEN }}
+          JOB_SLUG: ${{ inputs.job_slug }}
+        run: |
+          set -euo pipefail
+          test -n "$OUTPUT_TOKEN" || { echo "Add the OUTPUT_REPO_TOKEN secret (a token with write access to output_repo)"; exit 1; }
+          git clone --depth 1 --branch "$OUTPUT_BRANCH" "https://x-access-token:${OUTPUT_TOKEN}@github.com/${OUTPUT_REPO}.git" target
+          mkdir -p target/resumes
+          cp output/*.tex target/resumes/
+          cd target
+          git config user.name "resume-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add resumes
+          git commit -m "Add tailored resume: ${JOB_SLUG}" || echo "No changes to commit"
+          git push origin "HEAD:${OUTPUT_BRANCH}"

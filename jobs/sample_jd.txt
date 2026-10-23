@@ -1,0 +1,56 @@
+About the job
+
+About Avoca
+
+Avoca is transforming how home service companies engage with their customers. Our AI-powered conversational agents handle every high-value inbound call, from booking jobs, qualifying leads, and driving higher revenue, all at a speed and consistency unmatched by human call centers.
+
+We're a Series B startup backed by Kleiner Perkins, Meritech Capital, General Catalyst, and other top-tier investors, with $125M raised and a $1B valuation. We grew 10x in 2025 and have scaled to 170+ employees in under two years across our NYC headquarters and Santa Barbara office.
+
+In a $1T+ market where 85% of missed calls go to competitors, we're building the category-defining platform for AI-driven customer engagement, serving the largest brands in home services. With high-energy, in-office teams in both locations, every hire here has an immediate and visible impact.
+
+About The Role
+
+We're looking for a software engineer who ships fast without dropping quality. You'll own features end-to-end with support from senior engineers, learn how AI systems behave in production, and see your work reach customers within days rather than quarters. The Bengaluru team is product engineering, so everything you build is customer-facing.
+
+What You'll Do
+
+Development & Implementation - Build scalable backend services, APIs, and AI-powered features using TypeScript/Node.js, Python, and cloud platforms. 
+Collaboration & Learning - Work closely with senior engineers, participate in code reviews, and contribute to technical and architecture discussions. 
+Product Integration - Partner with Product, Design, and Customer Success to translate requirements into robust, customer-facing solutions. 
+
+Specifically, you'll:
+
+Build and ship features end-to-end, from backend services to customer-facing interfaces. 
+Work on AI-powered workflows: prompt design, evaluation, and the systems that make LLMs reliable in production. 
+Build integrations with CRM systems, scheduling platforms, and third-party communication tools. 
+Fix real customer problems, often with a short loop between report and fix going live. 
+Write comprehensive tests, add monitoring, and take ownership of what you ship after it ships. 
+Participate in on-call rotation and incident response to ensure system reliability. 
+Take loosely defined problems, ask the right questions, and drive them to done with minimal hand-holding. 
+
+Work Environment & Schedule
+
+Hybrid, based in Bengaluru - regular office presence expected for collaboration and team coordination. 
+Some overlap with US business hours may be needed for client coordination and project work. 
+
+What You'll Bring
+
+2+ years of software engineering experience, ideally full-stack, including at least 1 year in a fast-paced startup or growth-stage environment. 
+Strong programming skills in modern JavaScript/TypeScript and Python, with backend development experience. 
+Hands-on experience with AWS or GCP and modern deployment practices. 
+Experience building and maintaining RESTful APIs and understanding of service-oriented architectures. 
+Comfort working with SQL databases at scale. 
+A track record of fast, high-quality execution - you move quickly and your work holds up. 
+Self-driven: you unblock yourself, chase down context, and don't need work broken into small pieces. 
+Comfort with ambiguity and changing requirements in a fast-moving startup. 
+Curiosity about AI and LLMs - direct experience is a plus, appetite to learn is required. 
+Low ego, high energy, and a bias toward shipping. 
+
+Bonus Points
+
+Experience with AI/ML technologies, LLMs, or conversational AI systems. 
+Background in B2B SaaS or enterprise software. 
+Previous startup experience or exposure to rapid scaling. 
+Contributions to open source or active developer community participation. 
+Experience with real-time systems, or event-driven architectures. 
+Familiarity with Docker/containerization and orchestration tools. 
