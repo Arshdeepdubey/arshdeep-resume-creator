@@ -40,7 +40,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     # Prebuilt TeX Live image: pdflatex and the template packages are already installed.
-    container: texlive/texlive:latest
+    container:
+      image: texlive/texlive:latest
+      # The checkout writes files as root. Run every step as root too, so git trusts the
+      # repo and the JD file in jobs/ can be written.
+      options: --user root
     steps:
       - uses: actions/checkout@v4
 
