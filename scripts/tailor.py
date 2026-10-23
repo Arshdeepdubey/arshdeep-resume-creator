@@ -801,6 +801,9 @@ class ReplySource:
                 raise LLMUnavailable(
                     f"The LLM returned HTTP {exc.status_code} for model '{self.model}'. Check LLM_MODEL "
                     f"(for Ollama: `ollama list`). {exc.message}")
+            if isinstance(resp, str):
+                raise LLMUnavailable("The LLM endpoint returned plain text instead of a chat reply: "
+                                     + resp[:300])
             if not resp.choices:
                 raise LLMUnavailable("The LLM returned no choices")
             choice = resp.choices[0]
