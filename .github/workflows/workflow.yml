@@ -8,7 +8,7 @@ on:
         required: false
         type: string
       job_slug:
-        description: "Short name for the output file, e.g. avoca-software-engineer"
+        description: "Short name for the output file, e.g. bloomreach-software-engineer"
         required: true
         default: "tailored"
         type: string
@@ -16,10 +16,10 @@ on:
         description: "Extra instructions for this run (optional)"
         required: false
         type: string
-      model:
-        description: "GitHub Models model id (free tier)"
+      ollama_model:
+        description: "Ollama base model (same as the local setup)"
         required: false
-        default: "meta/Llama-3.3-70B-Instruct"
+        default: "llama3.1:8b"
         type: string
       output_repo:
         description: "Optional owner/repo to save the .tex into. Leave empty to only download the artifact."
@@ -33,12 +33,11 @@ on:
 
 permissions:
   contents: write   # lets the run commit the updated jobs/sample_jd.txt back to this branch
-  models: read      # lets GITHUB_TOKEN call GitHub Models
 
 jobs:
   tailor:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     steps:
       - uses: actions/checkout@v4
 
@@ -47,7 +46,6 @@ jobs:
           python-version: "3.12"
 
       - name: Install LaTeX (cached after the first run)
-        # Caches the apt packages, so later runs restore them instead of downloading again.
         uses: awalsh128/cache-apt-pkgs-action@v1
         with:
           packages: texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended lmodern
@@ -56,17 +54,28 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r requirements.txt
 
-      - name: Debug GitHub Models endpoint
-        continue-on-error: true
+      - name: Install Ollama
+        run: curl -fsSL https://ollama.com/install.sh | sh
+
+      - name: Cache Ollama models
+        uses: actions/cache@v4
+        with:
+          path: ~/.ollama/models
+          key: ollama-${{ inputs.ollama_model }}
+
+      - name: Start Ollama and load the model
         env:
-          LLM_MODEL: ${{ inputs.model }}
-          GH_TOKEN_FOR_MODELS: ${{ secrets.GITHUB_TOKEN }}
+          OLLAMA_MODEL: ${{ inputs.ollama_model }}
         run: |
-          curl -sS -w '\nHTTP %{http_code}\n' https://models.github.ai/inference/chat/completions \
-            -H "Authorization: Bearer $GH_TOKEN_FOR_MODELS" \
-            -H "Content-Type: application/json" \
-            -d "{\"model\": \"$LLM_MODEL\", \"messages\": [{\"role\": \"user\", \"content\": \"Reply with the word hello.\"}], \"max_tokens\": 20}" \
-            | head -c 1500
+          set -euo pipefail
+          nohup ollama serve > "$RUNNER_TEMP/ollama.log" 2>&1 &
+          for i in $(seq 1 30); do
+            curl -sf http://localhost:11434/api/tags >/dev/null && break
+            sleep 2
+          done
+          ollama pull "$OLLAMA_MODEL"
+          # Same settings as the local Modelfile (8192-token context)
+          ollama create resume-llm -f Modelfile
 
       - name: Save pasted JD to jobs/sample_jd.txt
         if: inputs.job_description != ''
@@ -93,9 +102,9 @@ jobs:
           JD_FILE: jobs/sample_jd.txt
           EXTRA_INSTRUCTIONS: ${{ inputs.instructions }}
           JOB_SLUG: ${{ inputs.job_slug }}
-          LLM_MODEL: ${{ inputs.model }}
-          LLM_BASE_URL: https://models.github.ai/inference
-          LLM_API_KEY: ${{ secrets.GITHUB_TOKEN }}
+          LLM_MODEL: resume-llm
+          LLM_BASE_URL: http://localhost:11434/v1
+          LLM_API_KEY: ollama
         run: python scripts/tailor.py
 
       - name: Upload resume (.tex) for download
