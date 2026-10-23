@@ -39,20 +39,14 @@ jobs:
   tailor:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    # Prebuilt TeX Live image: pdflatex and the template packages are already installed.
+    container: texlive/texlive:latest
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-
-      - name: Install LaTeX (only the packages the template needs)
-        timeout-minutes: 15
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends -o Acquire::Retries=3 \
-            texlive-latex-base texlive-latex-recommended texlive-latex-extra \
-            texlive-fonts-recommended lmodern
 
       - name: Install Python dependencies
         run: pip install -r requirements.txt
