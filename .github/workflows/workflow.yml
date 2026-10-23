@@ -3,13 +3,8 @@ name: Tailor resume
 on:
   workflow_dispatch:
     inputs:
-      jd_file:
-        description: "Committed JD file to use when job_description is empty"
-        required: false
-        default: "jobs/sample_jd.txt"
-        type: string
       job_description:
-        description: "Paste a job description here (overrides jd_file)"
+        description: "Paste the job description. It is saved to jobs/sample_jd.txt and used for this run. Leave empty to use the committed file."
         required: false
         type: string
       job_slug:
@@ -27,7 +22,7 @@ on:
         default: "meta/Llama-3.3-70B-Instruct"
         type: string
       output_repo:
-        description: "Optional owner/repo to save the .tex into, e.g. your-user/resume-output. Leave empty to only download the artifact."
+        description: "Optional owner/repo to save the .tex into. Leave empty to only download the artifact."
         required: false
         type: string
       output_branch:
@@ -37,12 +32,13 @@ on:
         type: string
 
 permissions:
-  contents: read
-  models: read   # lets GITHUB_TOKEN call GitHub Models
+  contents: write   # lets the run commit the updated jobs/sample_jd.txt back to this branch
+  models: read      # lets GITHUB_TOKEN call GitHub Models
 
 jobs:
   tailor:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
 
@@ -50,19 +46,39 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install LaTeX (pdflatex and the template packages)
+      - name: Install LaTeX (only the packages the template needs)
+        timeout-minutes: 15
         run: |
           sudo apt-get update
-          sudo apt-get install -y texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended
+          sudo apt-get install -y --no-install-recommends -o Acquire::Retries=3 \
+            texlive-latex-base texlive-latex-recommended texlive-latex-extra \
+            texlive-fonts-recommended lmodern
 
       - name: Install Python dependencies
         run: pip install -r requirements.txt
 
+      - name: Save pasted JD to jobs/sample_jd.txt
+        if: inputs.job_description != ''
+        env:
+          JD_TEXT: ${{ inputs.job_description }}
+          JOB_SLUG: ${{ inputs.job_slug }}
+        run: |
+          set -euo pipefail
+          printf '%s\n' "$JD_TEXT" > jobs/sample_jd.txt
+          if git diff --quiet -- jobs/sample_jd.txt; then
+            echo "Job description unchanged"
+            exit 0
+          fi
+          git config user.name "resume-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add jobs/sample_jd.txt
+          git commit -m "Update job description: ${JOB_SLUG}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
       - name: Tailor resume
         env:
           # Inputs go through env vars (never interpolated into the shell) to avoid injection.
-          JD_TEXT: ${{ inputs.job_description }}
-          JD_FILE: ${{ inputs.jd_file }}
+          JD_FILE: jobs/sample_jd.txt
           EXTRA_INSTRUCTIONS: ${{ inputs.instructions }}
           JOB_SLUG: ${{ inputs.job_slug }}
           LLM_MODEL: ${{ inputs.model }}
