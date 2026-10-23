@@ -56,6 +56,18 @@ jobs:
       - name: Install Python dependencies
         run: pip install -r requirements.txt
 
+      - name: Debug GitHub Models endpoint
+        continue-on-error: true
+        env:
+          LLM_MODEL: ${{ inputs.model }}
+          GH_TOKEN_FOR_MODELS: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -sS -w '\nHTTP %{http_code}\n' https://models.github.ai/inference/chat/completions \
+            -H "Authorization: Bearer $GH_TOKEN_FOR_MODELS" \
+            -H "Content-Type: application/json" \
+            -d "{\"model\": \"$LLM_MODEL\", \"messages\": [{\"role\": \"user\", \"content\": \"Reply with the word hello.\"}], \"max_tokens\": 20}" \
+            | head -c 1500
+
       - name: Save pasted JD to jobs/sample_jd.txt
         if: inputs.job_description != ''
         env:
