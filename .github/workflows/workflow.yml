@@ -38,13 +38,7 @@ permissions:
 jobs:
   tailor:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-    # Prebuilt TeX Live image: pdflatex and the template packages are already installed.
-    container:
-      image: texlive/texlive:latest
-      # The checkout writes files as root. Run every step as root too, so git trusts the
-      # repo and the JD file in jobs/ can be written.
-      options: --user root
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
 
@@ -52,20 +46,15 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install Python dependencies
-        run: '"$pythonLocation/bin/python" -m pip install -r requirements.txt'
+      - name: Install LaTeX (cached after the first run)
+        # Caches the apt packages, so later runs restore them instead of downloading again.
+        uses: awalsh128/cache-apt-pkgs-action@v1
+        with:
+          packages: texlive-latex-base texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended lmodern
+          version: v1
 
-      - name: Check the checkout (git repo present?)
-        run: |
-          echo "PWD: $(pwd)"
-          echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
-          ls -la
-          if git rev-parse --is-inside-work-tree; then
-            echo "Git repo found"
-          else
-            echo "::error::No git repository in $(pwd). The checkout step did not create one."
-            exit 1
-          fi
+      - name: Install Python dependencies
+        run: pip install -r requirements.txt
 
       - name: Save pasted JD to jobs/sample_jd.txt
         if: inputs.job_description != ''
@@ -95,7 +84,7 @@ jobs:
           LLM_MODEL: ${{ inputs.model }}
           LLM_BASE_URL: https://models.github.ai/inference
           LLM_API_KEY: ${{ secrets.GITHUB_TOKEN }}
-        run: '"$pythonLocation/bin/python" scripts/tailor.py'
+        run: python scripts/tailor.py
 
       - name: Upload resume (.tex) for download
         uses: actions/upload-artifact@v4
