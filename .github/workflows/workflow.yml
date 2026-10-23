@@ -51,6 +51,18 @@ jobs:
       - name: Install Python dependencies
         run: '"$pythonLocation/bin/python" -m pip install -r requirements.txt'
 
+      - name: Check the checkout (git repo present?)
+        run: |
+          echo "PWD: $(pwd)"
+          echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
+          ls -la
+          if git rev-parse --is-inside-work-tree; then
+            echo "Git repo found"
+          else
+            echo "::error::No git repository in $(pwd). The checkout step did not create one."
+            exit 1
+          fi
+
       - name: Save pasted JD to jobs/sample_jd.txt
         if: inputs.job_description != ''
         env:
@@ -58,8 +70,9 @@ jobs:
           JOB_SLUG: ${{ inputs.job_slug }}
         run: |
           set -euo pipefail
+          cp jobs/sample_jd.txt "$RUNNER_TEMP/previous_jd.txt" 2>/dev/null || : > "$RUNNER_TEMP/previous_jd.txt"
           printf '%s\n' "$JD_TEXT" > jobs/sample_jd.txt
-          if git diff --quiet -- jobs/sample_jd.txt; then
+          if cmp -s "$RUNNER_TEMP/previous_jd.txt" jobs/sample_jd.txt; then
             echo "Job description unchanged"
             exit 0
           fi
